@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Royal Battle</title>
+    <link rel="stylesheet" href="bootstrap.css">
+
+    <style>
+        .vertical-center {
+            min-height: 100%;  
+            min-height: 100vh; 
+
+            display: flex;
+            align-items: center;
+        }
+        .title{
+            color:white;
+        }
+    </style>
+</head>
+
+<body style="background-color: darkred">
+    <div class="login page">
+        <div class="container vertical-center">
+            <div class="col-sm-12 col-md-12 col-lg-12" align="center">
+                <h1 class="title">Welcome to Royal Battle!</h1>
+                <h2 class="title">Enter your name:</h2>
+                <input class="usernameInput" type="text" maxlength="25" />
+                <button class="usernameEnter">Enter</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="gameSelection" style="display: none">
+        <div class="container">
+            <div class="welcome">
+                <div class="col-sm-12" align="center">
+                    <h1 id="welcome" class="title">Welcome!</h1>
+                </div>
+            </div>
+
+            <div class="playerList">
+                <div class="col-sm-3">
+                    <h3 class="title">Players:</h3>
+                    <ul id="playerList" class="list-group"></ul>
+                </div>
+            </div>
+
+            <div class="wait">
+                <div class="col-sm-9" align="center">
+                    <h2 class="title">Wait for others to join!</h2>
+                </div>
+            </div>
+            
+            <div class="gamemodes" style="display: none">
+                <div class="col-sm-9" align="center">
+                    <h1 class="title">Select Gamemode:</h1>
+                    <div id="gamemodes" class="list-group">
+                        <a href="modes/battle.html" class="list-group-item" id="battle" style="display:none">Battle (1v1)</a>
+                        <a href="modes/triple.html" class="list-group-item" id="triple" style="display:none">Triple (1v1v1)</a>
+                        <a href="modes/fourway.html" class="list-group-item"id="fourway"style="display:none">Fourway (1v1v1v1)</a>
+                        <a href="modes/team.html" class="list-group-itstem" id="team" style="display:none">Teams (2v2)</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="wait2" style="display: none">
+                <div class="col-sm-9 vertical-center">
+                    <h2 class="title">Wait! The Host is selecting the Gamemode!</h2>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="bootstrap.js"></script>
+    <script src="/main.js"></script>
+</body>
+
+</html>
