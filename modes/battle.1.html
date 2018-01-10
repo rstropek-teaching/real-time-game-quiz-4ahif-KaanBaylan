@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <title>Royal Battle - 1v1</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../bootstrap.css">
+    <style>
+        .vertical-center {
+            position: absolute;
+            top: 50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+        }
+        .playfield{
+            height: 200px;
+            width: 100%;
+        }
+        .title{
+            color:white;
+        }
+        .hero{
+            height: 150px;
+            width: 150px;
+            
+            background-color:orangered;
+            box-shadow: 5px 5px tomato;
+            outline: 2px solid black;
+        }
+        .abilities{
+            background-color:orange;
+        }
+        .footer {
+            position: fixed;
+            height: 5%;
+            bottom: 0;
+            width: 100%;
+            background-color: orange;
+        }
+        .player {
+            position: fixed;
+            height: 20%;
+            bottom: 0;
+            width: 100%;
+        }
+        .player-mobile {
+            position: fixed;
+            height: 30%;
+            bottom: 0;
+            width: 100%;
+        }
+        .selection{
+            width: 50%;
+            height: 50%;
+            font-size: 200%;
+        }
+        .status{
+            background-color: darkgray;
+            box-shadow: 2px 2px;
+            margin: 5px;
+            border-radius: 20px;
+            width: 25%;
+        }
+        .status-mobile{
+            background-color: darkgray;
+            box-shadow: 2px 2px;
+            border-radius: 20px;
+        }
+        .card{
+            height: 85px;
+            width: 75px;
+        }
+        .special{
+            height: 170px;
+            width: 150px;
+            background-color:goldenrod;
+        }
+    </style>
+</head>
+<body style="background-color: darkred">
+
+    <div class="start" style="display:none">
+        <div class="container">
+            <div class="vertical-center">
+                <h2 align="center" class="title" id="start-text">Please Guess the selected number between 1 and 10.000</h2>
+                <br>
+                <div class="col-sm-12">
+                    <input class="col-xs-12 col-md-2 col-md-push-4" type="number" name="GuessNumber" id="guessNumber" max="10000" min="1">
+                    <button class="col-xs-12 col-md-2 col-md-push-4" id="guessNumberBtn">Enter Guess!</button>
+                </div>
+            </div>            
+        </div>
+    </div>
+
+    <div class="gameWait" style="display:none">
+        <div class="vertical-center">
+            <h2 class="title" id="waitMessage">Waiting for Opponent to guess!</h2>
+        </div>
+    </div>
+
+    <div class="hero-select" style="display:none">
+        <div class="container">
+            <div class="col-xs-12">
+                <h1 class="title" align="center">Select your Hero:</h1>
+                <h3 class="title">Hover over or Click on the classes for info! </h3>
+                <br/>
+            </div>
+            <div class="col-sm-6 col-md-2 col-lg-2" id="Healer" align="center">
+                <h3 class="title" id="HealerText">Healer</h3>
+                <img class="hero" src="img/healer.png" alt="Healer">
+                <br>
+                <br>
+                <div class="abilities" id="healerabs" style="display:none">
+                    <p><b>Special Abilty:</b> Gets an heal-action (Cooldown: 2 rounds)</p>
+                    <p>Can heal himself 2 times in one round!</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-2 col-lg-2" id="Warrior" align="center">
+                <h3 class="title" id="WarriorText">Warrior</h3>
+                <img class="hero" src="img/Warrior.png" alt="Warrior" >
+                <br>
+                <br>
+                <div class="abilities" id="warriorabs" style="display:none">
+                    <p><b>Special Abilty:</b> Gets an attack-action (Cooldown: 2 rounds)</p>
+                    <p>Does more damage, if he blocks a attack in a round before</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-2 col-lg-2" id="Defender" align="center">
+                <h3 class="title" id="DefenderText">Defender</h3>
+                <img class="hero" src="img/Defender.png" alt="Defender" >
+                <br>
+                <br>
+                <div class="abilities" id="defenderabs" style="display:none">
+                    <p><b>Special Abilty:</b> Gets an block-action (Cooldown: 2 rounds)</p>
+                    <p>Gets a lifepoint, when he blocks 2 attacks sucessfully</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-2 col-lg-2" id="Berserk" align="center">
+                <h3 class="title" id="BerserkText">Berserk</h3>
+                <img class="hero" src="img/Berserk.png" alt="Berserk" >
+                <br>
+                <br>
+                <div class="abilities" id="berserkabs" style="display:none">
+                    <p><b>Special Abilty:</b> One Attack does 2 Damage (Cooldown: 3 rounds)</p>
+                    <p>He can attack one more time. If the attack before was sucessful. (Max. 4 Attacks per round)</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-2 col-lg-2" id="Vampire" align="center">
+                <h3 class="title" id="VampireText">Vampire</h3>
+                <img class="hero" src="img/Vampire.png" alt="Vampire" >
+                <br>
+                <br>
+                <div class="abilities" id="vampireabs" style="display:none" >
+                    <p><b>Special Abilty:</b> Paralise the enemy and get 1 lifepoint (Cooldown: 4 rounds)</p>
+                    <p>Gets an lifepoint for 3 sucessful attacks</p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-2 col-lg-2" id="Hydra" align="center">
+                <h3 class="title" id="HydraText">Hydra</h3>
+                <img class="hero" src="img/Hydra.png" alt="Hydra" >
+                <br>
+                <br>
+                <div class="abilities" id="hydraabs" style="display:none">
+                    <p><b>Special Abilty:</b> Destroy 2 cards of your enemy (Cooldown: 4 rounds)</p>
+                    <p>When has lower HP than enemy, does 2 damage</p>
+                </div>
+            </div>
+        </div>
+        <div class="container hidden-xs">
+            <div class="col-xs-12" align="center">
+                <select id="hero" class="selection">
+                    <option value="healer">Healer</option>
+                    <option value="warrior">Warrior</option>
+                    <option value="defender">Defender</option>
+                    <option value="berserk">Berserk</option>
+                    <option value="vampire">Vampire</option>
+                    <option value="hydra">Hydra</option>
+                </select>
+                <button class="selection" id="heroSelected">Select Hero!</button>                
+            </div>
+        </div>
+        <div class="footer fixed-top visible-xs">
+            <div class="col-xs-12" align="center">
+                <select id="hero" class="selection">
+                    <option value="healer">Healer</option>
+                    <option value="warrior">Warrior</option>
+                    <option value="defender">Defender</option>
+                    <option value="berserk">Berserk</option>
+                    <option value="vampire">Vampire</option>
+                    <option value="hydra">Hydra</option>
+                </select>
+                <button id="heroSelected">Select Hero!</button>                
+            </div>
+        </div>
+    </div>
+
+    <div class="game">
+
+        <div class="hidden-xs">
+            <div class="col-sm-2" align="center">
+                <div class="special">
+                    <h4 class="title vertical-center" id="oppCooldown">x Rounds Cooldown</h4>
+                </div>
+            </div>
+
+            <div class="col-sm-6" align="center">
+                <ul id="opphand" class="list-inline">
+                    <li class="list-inline-item card" align="center"><img src="img/BlankCard.png" alt=""></li>
+                    <li class="list-inline-item card" align="center"><img src="img/BlankCard.png" alt=""></li>
+                    <li class="list-inline-item card" align="center"><img src="img/BlankCard.png" alt=""></li>
+                    <li class="list-inline-item card" align="center"><img src="img/BlankCard.png" alt=""></li>
+                    <li class="list-inline-item card" align="center"><img src="img/BlankCard.png" alt=""></li>
+                    <li class="list-inline-item card" align="center"><img src="img/BlankCard.png" alt=""></li>
+                    <li class="list-inline-item card" align="center"><img src="img/BlankCard.png" alt=""></li>
+                    <li class="list-inline-item card" align="center"><img src="img/BlankCard.png" alt=""></li>
+                    <li class="list-inline-item card" align="center"><img src="img/BlankCard.png" alt=""></li>
+                    <li class="list-inline-item card" align="center"><img src="img/BlankCard.png" alt=""></li>
+                    
+                    <h4 class="title" id="oppCardCount">x cards</h4>
+                </ul>
+            </div>
+
+            <div class="col-sm-4 status" id="enemy">
+                <table>
+                    <tr>
+                        <td class="title" id="opponentName" style="font-size: 200%">Endgegner <br> (30 W - 0 L)</td>
+                        <td rowspan="2"><img src="img/Hydra.png" alt="OpponentHero" id="opponentHero" style="height: 150px; width: 150px;"></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 70%" align="center">
+                            <p id="oppHP" style="padding-top: 10px; color:darkblue;">HP: 10/10 </p>  
+                            <div class="progress">
+                                <div id="oppLife" class="progress-bar" style="width: 100%" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10">Life</div>
+                            </div>   
+                        </td> 
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="visible-xs">
+            <div class="col-xs-push-8 col-xs-4 status-mobile" id="enemy">
+                <table>
+                    <tr>
+                        <td rowspan="2"><img src="img/Hydra.png" alt="OpponentHero" id="opponentHero" style="height: 100px; width: 100px;  padding: 2px;"></td>
+                        <td class="title" id="opponentName" style="font-size: 100%">Endgegner <br> (30 W - 0 L)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 70%" align="center">
+                            <p id="HP" style="padding-top: 10px; color:darkblue;">HP: 10/10 </p>  
+                            <div class="progress">
+                                <div id="oppLife" class="progress-bar" style="width: 100%" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10">Life</div>
+                            </div>                      
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-xs-12" id="space" style="height:200px"><br></div>
+
+        <div class="col-xs-12 playfield">
+            <div class="col-xs-2">
+                <h3 class="title" id="Turn">It's your Turn!</h3>
+            </div>
+            
+            <div class="col-xs-7" id="playfield" style="height:200px">
+                <div class="vertical-center">
+                    <div class="card" id="currentCard">
+                        <img src="img/BlankCard.png" alt="">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-3" id="cardstack" style="height:200px;">
+                <div class="vertical-center">
+                    <div class="card">
+                        <img src="img/BlankCard.png" alt="">
+                    </div>    
+                </div>
+            </div>
+        </div>
+
+        <div class="player hidden-xs">
+            <div class="col-sm-4 status" id="player">        
+                <table>
+                    <tr>
+                        <td rowspan="2"><img src="img/Berserk.png" alt="PlayerHero" id="playerHero" style="height: 150px; width: 150px;"></td>
+                        <td class="title" id="PlayerName" style="font-size: 200%"> King of Kings <br> (32 W - 1 L)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 70%" align="center">
+                            <p id="playerHP" style="padding-top: 10px; color:darkblue;">HP: 10/10 </p>  
+                            <div class="progress">
+                                <div id="playerLife" class="progress-bar" style="width: 100%" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10">Life</div>
+                            </div>   
+                        </td> 
+                    </tr>
+                </table>
+            </div>
+
+            <div class="col-md-6" id="divhand">
+                <ul id="hand" class="list-inline">
+                    <li class="list-inline-item card" align="center" id="Attack">
+                        <img src="img/Attack.png" alt="">
+                    </li>
+                    <li class="list-inline-item card" align="center"id="Paralyse">
+                        <img src="img/Paralyse.png" alt="">
+                    </li>      
+                    <li class="list-inline-item card" align="center" id="Block">
+                        <img src="img/Block.png" alt="">
+                    </li>      
+                </ul>
+            </div>
+
+            <div class="col-sm-2">
+                <div align="center">
+                    <div class="special">
+                        <h4 class="title vertical-center" id="playerCooldown">x Rounds Cooldown</h4>                                                          
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="player-mobile visible-xs">
+            <div class="col-xs-4 status-mobile" id="player">
+                <table>
+                    <tr>
+                        <td rowspan="2"><img src="img/Berserk.png" alt="PlayerHero" id="playerHero" style="height: 100px; width: 100px; padding: 2px;"></td>
+                        <td class="title" id="playerName" style="font-size: 100%">King of Kings <br> (32 W - 1 L)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 70%" align="center">
+                            <p id="HP" style="padding-top: 10px; color:darkblue;">HP: 10/10 </p>  
+                            <div class="progress">
+                                <div id="playerLife" class="progress-bar" style="width: 100%" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10">Life</div>
+                            </div>                      
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <script src="../socket.io/socket.io.js"></script>
+    <script src="../bootstrap.js"></script>
+    <script src="../main.js"></script>
+
+    <script>
+       hand = $('#hand'); 
+       playfield = $("#playfield");
+       cardstock = $('#cardstock')
+
+       hand.sortable({
+           connectWith: "#playfield",
+           revert: true
+       });
+
+       playfield.droppable({
+           accept: '.card',
+           drop: function(evt, ui) {
+               $("#currentCard").empty();
+               $("#currentCard").append('<img src="img/'+ui.draggable.attr("id")+'.png">')  ;
+               ui.draggable.remove();
+           }
+       });
+       
+    </script>
+
+</body>
+</html>
